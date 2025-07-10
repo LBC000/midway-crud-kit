@@ -7,11 +7,11 @@ pnpm add midway-helper
 
 ### 错误处理
 ```js
-import { ErrorMiddleware } from 'midway-helper';
+import { errorMiddleware } from 'midway-helper';
 this.app.useMiddleware([
   JwtMiddleware, // 鉴权：第一道关卡，未登录直接拦截
   ReportMiddleware, // 日志或统计：记录用户行为
-  ErrorMiddleware, // 错误处理：必须放最后才能捕获前面抛出的错误
+  errorMiddleware, // 错误处理：必须放最后才能捕获前面抛出的错误
 ]);
 
 import { throwError } from 'midway-helper';
