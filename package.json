@@ -4,6 +4,10 @@
   "description": "A reusable CRUD decorator and base service for MidwayJS + TypeORM.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LBC000/midway-crud-kit"
+  },
   "scripts": {
     "build": "tsc"
   },
