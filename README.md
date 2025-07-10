@@ -84,7 +84,7 @@ export class RoleService extends BaseCrudService<Role> {
     timezone: 'America/New_York',
     dateFields: ['createdAt', 'updatedAt'],
   },
-} as CrudOptions)
+})
 export class RoleController extends BaseController {
   @InjectEntityModel(Role)
   roleRepo: Repository<Role>;
