@@ -93,3 +93,19 @@ export class RoleController extends BaseController {
 // 获取服务实例
 const serviceInstance = await ctx.requestContext.getAsync(RoleService);
 ```
+
+### 控制器基类
+```js
+import { BaseController } from 'midway-helper';
+export class RoleController extends BaseController {
+  @InjectEntityModel(Role)
+  roleRepo: Repository<Role>;
+}
+```
+
+### entity 基类
+```js
+import { BaseEntity } from 'midway-helper';
+@Entity()
+export class Menu extends BaseEntity {}
+```

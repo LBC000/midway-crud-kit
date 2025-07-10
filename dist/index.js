@@ -18,3 +18,4 @@ __exportStar(require("./crud"), exports);
 __exportStar(require("./error"), exports);
 __exportStar(require("./utils"), exports);
 __exportStar(require("./controller"), exports);
+__exportStar(require("./entity"), exports);

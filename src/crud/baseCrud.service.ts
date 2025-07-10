@@ -33,7 +33,7 @@ export class BaseCrudService<T extends ObjectLiteral> {
     // console.log('新增', data, this.repo);
     const entity = this.repo.create(data);
     const res = await this.repo.save(entity);
-    return { data: res };
+    return { data: res, code: 0 };
   }
 
   /** 根据 ID 更新数据 */
@@ -54,16 +54,19 @@ export class BaseCrudService<T extends ObjectLiteral> {
 
   /** 根据 ID 获取详情 */
   async info(id: number) {
-    return this.repo.findOneBy({ id });
+    const data = await this.repo.findOneBy({ id });
+    return { data, code: 0 };
   }
 
   /** 查询全部 */
   async all(query: any) {
-    return this.repo.find({ where: query });
+    const data = await this.repo.find({ where: query });
+    return { data, code: 0 };
   }
 
   async findOne(data: any) {
-    return this.repo.findOne(data);
+    const res = await this.repo.findOne(data);
+    return { data: res, code: 0 };
   }
 
   /** 分页查询，支持条件 */
@@ -107,6 +110,6 @@ export class BaseCrudService<T extends ObjectLiteral> {
     //   dateFields: ['createdAt', 'updatedAt'],
     // });
 
-    return { data: data, count, totalPages };
+    return { data: data, count, totalPages, code: 0 };
   }
 }
