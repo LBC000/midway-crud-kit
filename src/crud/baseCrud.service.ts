@@ -1,4 +1,5 @@
-import { convertDateFields } from "./utils/responseHelper";
+import { ObjectLiteral, Repository } from "typeorm";
+// import { convertDateFields } from '../../utils/responseHelper';
 
 function filterUpdateFields<T>(
   data: Partial<T>,
@@ -17,10 +18,14 @@ function filterUpdateFields<T>(
   return result;
 }
 
-export class BaseCrudService<T> {
+export class BaseCrudService<T extends ObjectLiteral> {
   // 子类需实现 repository
   get repo(): any {
     throw new Error("子类需实现 repo getter");
+  }
+
+  async getRepo(): Promise<Repository<T>> {
+    return this.repo;
   }
 
   /** 创建数据 */
@@ -95,12 +100,13 @@ export class BaseCrudService<T> {
     });
 
     const totalPages = Math.ceil(count / size);
-    const list = convertDateFields(data, {
-      convertDates: true,
-      timezone: "Asia/Shanghai",
-      dateFields: ["createdAt", "updatedAt"],
-    });
 
-    return { data: list, count, totalPages };
+    // const list = convertDateFields(data, {
+    //   convertDates: true,
+    //   timezone: 'Asia/Shanghai',
+    //   dateFields: ['createdAt', 'updatedAt'],
+    // });
+
+    return { data: data, count, totalPages };
   }
 }
