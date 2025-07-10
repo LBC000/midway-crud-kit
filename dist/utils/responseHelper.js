@@ -17,20 +17,20 @@ dayjs_1.default.extend(timezone_1.default);
 const dateFieldsCache = new Map();
 // 判断是否为纯对象（兼容 Object.create(null) 和 TypeORM 实例）
 function isPlainObject(obj) {
-    return Object.prototype.toString.call(obj) === '[object Object]';
+    return Object.prototype.toString.call(obj) === "[object Object]";
 }
 // 性能转换函数（支持 TypeORM Entity）
-function convertDateFields(input, { convertDates = true, timezone = 'Asia/Shanghai', dateFields = ['createdAt', 'updatedAt'], } = {}) {
+function convertDateFields(input, { convertDates = true, timezone = "Asia/Shanghai", dateFields = ["createdAt", "updatedAt"], } = {}) {
     if (!convertDates || input === null || input === undefined)
         return input;
-    const cacheKey = dateFields.join(',');
+    const cacheKey = dateFields.join(",");
     let dateFieldsSet = dateFieldsCache.get(cacheKey);
     if (!dateFieldsSet) {
         dateFieldsSet = new Set(dateFields);
         dateFieldsCache.set(cacheKey, dateFieldsSet);
     }
     const isRootArray = Array.isArray(input);
-    if (!isRootArray && typeof input !== 'object')
+    if (!isRootArray && typeof input !== "object")
         return input;
     const visited = new WeakMap();
     const stack = [];
@@ -48,7 +48,7 @@ function convertDateFields(input, { convertDates = true, timezone = 'Asia/Shangh
     }
     while (stack.length > 0) {
         const { source, target, key } = stack.pop();
-        if (source && typeof source === 'object') {
+        if (source && typeof source === "object") {
             if (visited.has(source)) {
                 target[key] = visited.get(source);
                 continue;
@@ -57,7 +57,7 @@ function convertDateFields(input, { convertDates = true, timezone = 'Asia/Shangh
             const isPlain = isPlainObject(source);
             // 非纯对象或类实例：尝试转换为普通对象（TypeORM）
             if (!isArr && !isPlain) {
-                if (typeof source.toJSON === 'function') {
+                if (typeof source.toJSON === "function") {
                     target[key] = source.toJSON();
                 }
                 else {
@@ -65,23 +65,25 @@ function convertDateFields(input, { convertDates = true, timezone = 'Asia/Shangh
                 }
                 continue;
             }
-            const newTarget = isArr ? new Array(source.length) : {};
+            const newTarget = isArr
+                ? new Array(source.length)
+                : {};
             target[key] = newTarget;
             visited.set(source, newTarget);
             for (const k of Object.keys(source)) {
                 const v = source[k];
                 if (dateFieldsSet.has(k) && v) {
-                    if (typeof v === 'string' ||
-                        typeof v === 'number' ||
+                    if (typeof v === "string" ||
+                        typeof v === "number" ||
                         v instanceof Date) {
                         const parsed = (0, dayjs_1.default)(v);
                         if (parsed.isValid()) {
-                            newTarget[k] = parsed.tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+                            newTarget[k] = parsed.tz(timezone).format("YYYY-MM-DD HH:mm:ss");
                             continue;
                         }
                     }
                 }
-                if (v && typeof v === 'object') {
+                if (v && typeof v === "object") {
                     stack.push({ source: v, target: newTarget, key: k });
                 }
                 else {
@@ -96,28 +98,33 @@ function convertDateFields(input, { convertDates = true, timezone = 'Asia/Shangh
     return result;
 }
 function ok(input, options) {
-    let msg = 'success';
+    // 如果没有传入任何参数，直接返回 { code: 0 }
+    if (input === undefined && options === undefined) {
+        return { code: 0 };
+    }
+    let msg = "success";
     let code = 0;
     let data = null;
     let convertDates = true;
-    let tz = 'Asia/Shanghai';
-    let dateFields = ['createdAt', 'updatedAt'];
-    if (typeof input === 'string') {
+    let tz = "Asia/Shanghai";
+    let dateFields = ["createdAt", "updatedAt"];
+    if (typeof input === "string") {
         msg = input;
         if (options) {
             convertDates = options.convertDates ?? true;
-            tz = options.timezone ?? 'Asia/Shanghai';
-            dateFields = options.dateFields ?? ['createdAt', 'updatedAt'];
+            tz = options.timezone ?? "Asia/Shanghai";
+            dateFields = options.dateFields ?? ["createdAt", "updatedAt"];
         }
     }
-    else {
+    else if (input) {
+        // 添加类型守卫，确保 input 不是 undefined
         ({
-            msg = 'success',
+            msg = "success",
             code = 0,
             data = null,
             convertDates = true,
-            timezone: tz = 'Asia/Shanghai',
-            dateFields = ['createdAt', 'updatedAt'],
+            timezone: tz = "Asia/Shanghai",
+            dateFields = ["createdAt", "updatedAt"],
         } = input);
     }
     const res = { msg, code };
@@ -134,14 +141,14 @@ function clearOkCache() {
     dateFieldsCache.clear();
 }
 function fail(input) {
-    let msg = 'fail';
+    let msg = "fail";
     let code = 400;
     let data = null;
-    if (typeof input === 'string') {
+    if (typeof input === "string") {
         msg = input;
     }
     else {
-        ({ msg = 'fail', code = 400, data = null } = input);
+        ({ msg = "fail", code = 400, data = null } = input);
     }
     const res = { code, msg };
     if (data !== null && data !== undefined) {

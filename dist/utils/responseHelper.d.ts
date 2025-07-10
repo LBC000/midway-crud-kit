@@ -6,16 +6,13 @@ interface OkOptions {
     timezone?: string;
     dateFields?: string[];
 }
-export declare function convertDateFields(input: any, { convertDates, timezone, dateFields, }?: {
+interface ConvertOptions {
     convertDates?: boolean;
     timezone?: string;
     dateFields?: string[];
-}): any;
-export declare function ok(input: string | OkOptions, options?: {
-    convertDates?: boolean;
-    timezone?: string;
-    dateFields?: string[];
-}): any;
+}
+export declare function convertDateFields(input: any, { convertDates, timezone, dateFields, }?: ConvertOptions): any;
+export declare function ok(input?: string | OkOptions, options?: ConvertOptions): any;
 export declare function clearOkCache(): void;
 export declare function fail(input: string | {
     msg?: string;
