@@ -1,6 +1,6 @@
 {
   "name": "midway-helper",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "A reusable CRUD decorator and base service for MidwayJS + TypeORM.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
