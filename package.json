@@ -1,6 +1,6 @@
 {
   "name": "midway-helper",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A reusable CRUD decorator and base service for MidwayJS + TypeORM.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,12 +9,14 @@
     "url": "https://github.com/LBC000/midway-helper"
   },
   "scripts": {
-    "build": "tsc"
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "rimraf": "^6.0.1",
     "typescript": "^5.0.0"
   },
   "dependencies": {
