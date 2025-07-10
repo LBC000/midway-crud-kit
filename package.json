@@ -17,7 +17,8 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && tsc"
+    "build": "npm run clean && tsc",
+    "publish": "npm run clean && tsc && npm publish"
   },
   "keywords": [],
   "author": "",
