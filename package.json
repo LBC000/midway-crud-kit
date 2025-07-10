@@ -1,0 +1,22 @@
+{
+  "name": "midway-crud-kit",
+  "version": "1.0.0",
+  "description": "A reusable CRUD decorator and base service for MidwayJS + TypeORM.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@midwayjs/core": "^3.20.4",
+    "@midwayjs/koa": "^3.20.5",
+    "dayjs": "^1.11.13",
+    "typeorm": "^0.3.25"
+  }
+}
