@@ -3,7 +3,7 @@ import { ObjectLiteral, Repository } from "typeorm";
 import {
   crudAdd,
   crudAll,
-  crudDelete,
+  crudDel,
   crudFindOne,
   crudInfo,
   crudList,
@@ -42,7 +42,7 @@ export class BaseCrudService<T extends ObjectLiteral> {
   }
 
   async del(body: { ids: number[] | string[] }) {
-    return await crudDelete(this.repo, body.ids);
+    return await crudDel(this.repo, body.ids);
   }
 
   async info(id: number) {

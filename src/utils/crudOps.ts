@@ -18,7 +18,7 @@ export async function crudUpdate<T extends ObjectLiteral>(
   return { code: 0 };
 }
 
-export async function crudDelete<T extends ObjectLiteral>(
+export async function crudDel<T extends ObjectLiteral>(
   repo: Repository<T>,
   ids: number[] | string[]
 ): Promise<{ code: 0 }> {
