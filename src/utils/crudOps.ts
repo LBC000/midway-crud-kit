@@ -1,61 +1,62 @@
-import { Repository, ObjectLiteral, FindOptionsOrder } from "typeorm";
+import { Repository, FindOptionsOrder, ObjectLiteral } from "typeorm";
+import { filterUpdateFields } from "./common";
+import {
+  CrudResultData,
+  CrudResultList,
+  CrudResultNoData,
+} from "../types/crud";
 
 export async function crudAdd<T extends ObjectLiteral>(
   repo: Repository<T>,
-  data: any
-): Promise<{ data: T; code: number }> {
+  data: T
+): Promise<CrudResultData<T, "add">> {
   const entity = repo.create(data);
-  const res: any = await repo.save(entity);
-  return { data: res, code: 0 };
+  const res = await repo.save(entity);
+  return { code: 0, action: "add", data: res };
 }
 
 export async function crudUpdate<T extends ObjectLiteral>(
   repo: Repository<T>,
   id: number,
   data: Partial<T>
-): Promise<{ code: number }> {
-  await repo.update(id, data);
-  return { code: 0 };
+): Promise<CrudResultNoData<"update">> {
+  const filtered: any = filterUpdateFields(data, ["createdAt", "updatedAt"]);
+  filtered.updatedAt = new Date();
+  await repo.update(id, filtered);
+  return { code: 0, action: "update" };
 }
 
 export async function crudDel<T extends ObjectLiteral>(
   repo: Repository<T>,
   ids: number[] | string[]
-): Promise<{ code: 0 }> {
+): Promise<CrudResultNoData<"del">> {
   await repo.delete(ids);
-  return { code: 0 };
+  return { code: 0, action: "del" };
 }
 
 export async function crudInfo<T extends ObjectLiteral>(
   repo: Repository<T>,
   id: number
-): Promise<{ data: T | null; code: number }> {
+): Promise<CrudResultData<T | null, "info">> {
   const data = await repo.findOneBy({ id } as any);
-  return { data, code: 0 };
+  return { code: 0, action: "info", data };
 }
 
 export async function crudAll<T extends ObjectLiteral>(
   repo: Repository<T>,
   query: any
-): Promise<{ data: T[]; code: number }> {
+): Promise<CrudResultData<T[], "all">> {
   const data = await repo.find({ where: query });
-  return { data, code: 0 };
-}
-
-export async function crudFindOne<T extends ObjectLiteral>(
-  repo: Repository<T>,
-  query: any
-): Promise<{ data: T | null; code: number }> {
-  const data = await repo.findOne(query);
-  return { data, code: 0 };
+  return { code: 0, action: "all", data };
 }
 
 export async function crudList<T extends ObjectLiteral>(
   repo: Repository<T>,
   query: Record<string, any>
-): Promise<{ data: T[]; count: number; totalPages: number; code: number }> {
+): Promise<CrudResultList<T>> {
   const rawPage = parseInt(query.page, 10);
   const rawSize = parseInt(query.size, 10);
+
   const page = Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
   const size = Number.isInteger(rawSize) && rawSize > 0 ? rawSize : 10;
 
@@ -66,8 +67,9 @@ export async function crudList<T extends ObjectLiteral>(
     [sortKey]: sortValue === "ASC" ? "ASC" : "DESC",
   } as FindOptionsOrder<any>;
 
-  const excludeKeys = ["page", "size", "sortKey", "sortValue"];
   const where: Record<string, any> = {};
+  const excludeKeys = ["page", "size", "sortKey", "sortValue"];
+
   for (const key in query) {
     if (!excludeKeys.includes(key)) {
       where[key] = query[key];
@@ -81,5 +83,15 @@ export async function crudList<T extends ObjectLiteral>(
     take: size,
   });
 
-  return { data, count, totalPages: Math.ceil(count / size), code: 0 };
+  const totalPages = Math.ceil(count / size);
+
+  return {
+    code: 0,
+    action: "list",
+    data,
+    count,
+    totalPages,
+    page,
+    size,
+  };
 }

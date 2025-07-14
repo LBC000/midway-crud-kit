@@ -1,14 +1,13 @@
-import { ObjectLiteral, Repository } from "typeorm";
+import { ObjectLiteral, Repository } from 'typeorm';
 
 import {
   crudAdd,
   crudAll,
   crudDel,
-  crudFindOne,
   crudInfo,
   crudList,
   crudUpdate,
-} from "../utils/crudOps";
+} from '../utils/crudOps';
 
 export class BaseCrudService<T extends ObjectLiteral> {
   // 子类需实现 repository
@@ -20,7 +19,7 @@ export class BaseCrudService<T extends ObjectLiteral> {
 
   get repo(): Repository<T> {
     if (!this._repo) {
-      throw new Error("Repository not initialized");
+      throw new Error('Repository not initialized');
     }
     return this._repo;
   }
@@ -51,10 +50,6 @@ export class BaseCrudService<T extends ObjectLiteral> {
 
   async all(query: any) {
     return await crudAll(this.repo, query);
-  }
-
-  async findOne(data: any) {
-    return await crudFindOne(this.repo, data);
   }
 
   async list(query: Record<string, any>) {
