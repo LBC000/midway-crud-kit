@@ -19,3 +19,4 @@ __exportStar(require("./error"), exports);
 __exportStar(require("./utils"), exports);
 __exportStar(require("./controller"), exports);
 __exportStar(require("./entity"), exports);
+__exportStar(require("./types"), exports);

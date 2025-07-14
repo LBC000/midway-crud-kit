@@ -73,8 +73,8 @@ export class RoleService extends BaseCrudService<Role> {
   },
 
   transform: {
-    list: async (result, ctx) => {
-      const { data, count, totalPages } = result;
+    list: async (res: AnyCrudResultList, ctx: Context) => {
+      const { data, count, totalPages } = res;
       console.log(data, count, totalPages, '结果');
       return { list: data };
     },
